@@ -1,0 +1,149 @@
+-- Create schema for the EternaFX framework
+CREATE SCHEMA eterna_fx;
+
+-- Innovator Profiles Table
+CREATE TABLE eterna_fx.innovator_profiles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    field VARCHAR(100),
+    key_achievements TEXT,
+    impact_on_society TEXT,
+    ethical_impact TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- User Feedback Table
+CREATE TABLE eterna_fx.user_feedback (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),  -- Assuming a users table exists for general user management
+    profile_id INT REFERENCES eterna_fx.innovator_profiles(id),
+    ethical_choice TEXT,
+    feedback TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Ethical Dilemmas Table
+CREATE TABLE eterna_fx.ethical_dilemmas (
+    id SERIAL PRIMARY KEY,
+    dilemma_description TEXT NOT NULL,
+    possible_outcomes TEXT[],
+    ethical_framework VARCHAR(100),  -- E.g., Deontology, Utilitarianism, Virtue Ethics
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Gamification Table
+CREATE TABLE eterna_fx.user_progress (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    points INT DEFAULT 0,
+    badges TEXT[],
+    level INT DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Ethical Frameworks Table (To store different frameworks used in decision-making)
+CREATE TABLE eterna_fx.ethical_frameworks (
+    id SERIAL PRIMARY KEY,
+    framework_name VARCHAR(100) NOT NULL,  -- e.g., Deontology, Utilitarianism
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- AI Decision-Making Logs Table (Logs for tracking AI decisions made in the system)
+CREATE TABLE eterna_fx.ai_decisions (
+    id SERIAL PRIMARY KEY,
+    dilemma_id INT REFERENCES eterna_fx.ethical_dilemmas(id),
+    ai_decision TEXT,
+    reasoning TEXT,  -- Explanation for AI's decision-making process
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bias Detection Logs Table (To track and analyze any biases detected in AI decision-making)
+CREATE TABLE eterna_fx.bias_detection_logs (
+    id SERIAL PRIMARY KEY,
+    decision_id INT REFERENCES eterna_fx.ai_decisions(id),
+    detected_bias VARCHAR(255),  -- E.g., Gender bias, Racial bias
+    severity VARCHAR(50),  -- Low, Medium, High
+    resolution_status VARCHAR(50),  -- Resolved, Unresolved
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Innovator Ratings Table (To store user ratings and feedback on innovator profiles)
+CREATE TABLE eterna_fx.innovator_ratings (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    profile_id INT REFERENCES eterna_fx.innovator_profiles(id),
+    rating INT CHECK (rating >= 1 AND rating <= 5),  -- Rating scale from 1 to 5
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- System Settings Table (For storing configurable settings such as ethical framework preferences)
+CREATE TABLE eterna_fx.system_settings (
+    id SERIAL PRIMARY KEY,
+    setting_name VARCHAR(100) NOT NULL,
+    setting_value VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table to store logs of all actions taken by users
+CREATE TABLE eterna_fx.user_action_logs (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    action_type VARCHAR(50),  -- E.g., 'decision', 'feedback', 'profile_view'
+    action_details TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for storing AI models and their configurations
+CREATE TABLE eterna_fx.ai_models (
+    id SERIAL PRIMARY KEY,
+    model_name VARCHAR(100),
+    model_type VARCHAR(50),  -- E.g., Decision Tree, Neural Network
+    model_configuration JSONB,  -- Configuration details in JSON format
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create an index on frequently queried fields for optimization (e.g., profile_name, user_id)
+CREATE INDEX idx_innovator_profiles_name ON eterna_fx.innovator_profiles(name);
+CREATE INDEX idx_user_feedback_user_id ON eterna_fx.user_feedback(user_id);
+CREATE INDEX idx_user_progress_user_id ON eterna_fx.user_progress(user_id);
+CREATE INDEX idx_ethical_dilemmas_ethics_framework ON eterna_fx.ethical_dilemmas(ethical_framework);
+
+-- Add foreign key constraints for integrity
+ALTER TABLE eterna_fx.user_feedback ADD CONSTRAINT fk_user_feedback_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE eterna_fx.user_feedback ADD CONSTRAINT fk_user_feedback_profile FOREIGN KEY (profile_id) REFERENCES eterna_fx.innovator_profiles(id) ON DELETE CASCADE;
+
+ALTER TABLE eterna_fx.user_progress ADD CONSTRAINT fk_user_progress_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+
+ALTER TABLE eterna_fx.innovator_ratings ADD CONSTRAINT fk_innovator_ratings_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE eterna_fx.innovator_ratings ADD CONSTRAINT fk_innovator_ratings_profile FOREIGN KEY (profile_id) REFERENCES eterna_fx.innovator_profiles(id) ON DELETE CASCADE;
+
+ALTER TABLE eterna_fx.ai_decisions ADD CONSTRAINT fk_ai_decisions_dilemma FOREIGN KEY (dilemma_id) REFERENCES eterna_fx.ethical_dilemmas(id) ON DELETE CASCADE;
+
+ALTER TABLE eterna_fx.bias_detection_logs ADD CONSTRAINT fk_bias_detection_decision FOREIGN KEY (decision_id) REFERENCES eterna_fx.ai_decisions(id) ON DELETE CASCADE;
+
+-- Optional: Populate the ethical frameworks table with predefined frameworks
+INSERT INTO eterna_fx.ethical_frameworks (framework_name, description)
+VALUES
+    ('Deontology', 'The ethical theory that emphasizes duty and adherence to rules.'),
+    ('Utilitarianism', 'The ethical theory that advocates for the greatest good for the greatest number.'),
+    ('Virtue Ethics', 'The ethical theory that focuses on moral character and virtuous behavior.');
+
+-- Optionally, you can create a view for easy reporting or querying across multiple tables
+CREATE VIEW eterna_fx.profile_feedback_view AS
+SELECT 
+    p.name AS innovator_name,
+    p.field,
+    p.key_achievements,
+    p.impact_on_society,
+    p.ethical_impact,
+    f.ethical_choice,
+    f.feedback
+FROM eterna_fx.innovator_profiles p
+JOIN eterna_fx.user_feedback f ON p.id = f.profile_id;
+
+-- End of schema creation
