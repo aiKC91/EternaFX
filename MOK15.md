@@ -1,8 +1,3 @@
----
-created: 2024-12-19T14:40:36-08:00
-modified: 2024-12-19T15:11:52-08:00
----
-
 # Legacy xp
 
 Below is the fully refined and integrated EternaFX code script, structured and enhanced for production readiness. The framework includes all core features, with modular and scalable components.
