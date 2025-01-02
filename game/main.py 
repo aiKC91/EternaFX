@@ -1,0 +1,39 @@
+from ai.prime_gap_analyzer import PrimeGapAnalyzer
+from scanner.body_scanner import BodyScanner
+from visualization.prime_gap_visualizer import PrimeGapVisualizer
+from ai.scenario_generator import ScenarioGenerator
+
+def run_game():
+    prime_analyzer = PrimeGapAnalyzer(prime_limit=1000)
+    scanner = BodyScanner()
+    scenario_gen = ScenarioGenerator()
+
+    while True:
+        command = input("Command (scan, visualize, prime, scenario, quit): ").lower()
+        
+        if command == "scan":
+            user_id = "Explorer"
+            scanner.perform_scan(user_id)
+            summary = scanner.get_scan_summary()
+            print("Scan Summary:", summary)
+        
+        elif command == "visualize":
+            PrimeGapVisualizer.visualize(prime_analyzer.prime_gaps, prime_analyzer.gap_ratios)
+        
+        elif command == "prime":
+            print("Prime Gaps (first 10):", prime_analyzer.prime_gaps[:10])
+            print("Gap Ratios (first 10):", prime_analyzer.gap_ratios[:10])
+        
+        elif command == "scenario":
+            new_scenario = scenario_gen.generate_scenario()
+            print("AI-Generated Scenario:", new_scenario)
+        
+        elif command == "quit":
+            print("Exiting EternaFX. Goodbye!")
+            break
+        
+        else:
+            print("Invalid command. Try again.")
+
+if __name__ == "__main__":
+    run_game()

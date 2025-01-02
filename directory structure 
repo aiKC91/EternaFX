@@ -1,0 +1,36 @@
+eternafx/
+├── core/
+│   ├── __init__.py
+│   ├── golden_ratio.py           # Golden Ratio utilities
+│   ├── harmony_controller.py     # Legacy vs. Chaos mechanics
+│   ├── player.py                 # Player stats and progression
+│   └── save_load.py              # Save/load functionality (JSON or DB)
+├── ai/
+│   ├── __init__.py
+│   ├── prime_gap_analyzer.py     # Prime gap analysis
+│   ├── scenario_generator.py     # AI scenario generation w/ breakthroughs
+│   └── ai_model_refiner.py       # AI model refinement using PHI
+├── scanner/
+│   ├── __init__.py
+│   ├── body_scanner.py           # Simulate body scans
+│   └── avatar_generator.py       # Create avatars based on scans
+├── utils/
+│   ├── __init__.py
+│   ├── golden_ratio.py           # PHI scaling & harmonic series
+│   ├── logger.py                 # Centralized logging
+│   └── breakthroughs.py          # Summaries (Riemann, P vs NP, etc.)
+├── visualization/
+│   ├── __init__.py
+│   ├── prime_gap_visualizer.py   # Prime gap visualizations
+│   └── body_scanner_visualizer.py # Body scanning visualizations
+├── game/
+│   ├── __init__.py
+│   └── main.py                   # Main EternaFX gameplay loop
+├── tests/
+│   ├── test_prime_gap_analyzer.py
+│   ├── test_body_scanner.py
+│   └── test_ai_model_refiner.py
+├── Dockerfile                    # Docker deployment
+├── docker-compose.yml            # Multi-container orchestration
+├── requirements.txt              # Dependencies
+└── README.md                     # Documentation
