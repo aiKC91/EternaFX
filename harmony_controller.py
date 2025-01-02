@@ -14,5 +14,4 @@ class HarmonyController:
     def get_status(self):
         return {
             "Harmony": round(self.harmony_level, 2),
-            "Chaos": round(self.chaos_level, 2)
-        }
+            "Chaos": round(self.chaos_level, 2)}
