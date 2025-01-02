@@ -1,4 +1,4 @@
-from core.golden_ratio import phi_scale, phi_inverse_scale
+ from core.golden_ratio import phi_scale, phi_inverse_scale
 
 class AIModelRefiner:
     """
