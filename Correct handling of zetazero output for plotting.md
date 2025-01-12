@@ -1,6 +1,7 @@
 ---
 created: 2025-01-09T09:00:46-08:00
-modified: 2025-01-09T09:01:08-08:00
+modified: 2025-01-11T19:20:44-08:00
+editorType: Checklist
 ---
 
 # Correct handling of zetazero output for plotting
