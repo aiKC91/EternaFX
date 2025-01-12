@@ -1,8 +1,7 @@
-eternafx/import numpy as np
-import plotly.graph_objects as go
-from mpmath import zetazero, zeta
+eternafx/__import__numpy_as_np
+__import__numpy_as_npplotly.graph_objects
 ├── core/numpy zeta_visualization.py
-│   ├── golden_ratio.py # Golden Ratio utilitiesreal_values = np.linspace(0, 1, 100) 
+│   ├── golden_ratio.py # Golden Ratio utilitiesreal_values = np.linspace(0, 1, 100)
 │   ├── decision_engine.py
 ├── ai/def generate_zeta_function_plot(critical_zeros_count = 20):
 │   ├── scenario_generator.py # Ada Lovelace AI-driven scenario generation
@@ -16,8 +15,8 @@ from mpmath import zetazero, zeta
 │   ├── framework_unification.py # K.C. Clark AI module for framework synergy
 │   ├── cognitive_flow.py # Edward Newton AI temporal dynamics
 ├── visualization/# Define the grid for Zeta function/"""
-    Generate a 3D heatmap visualization of the Zeta function dynamics.
-    """
+Generate a 3D heatmap visualization of the Zeta function dynamics.
+"""
 
 │   ├── immersive_simulation.py # Immersive equation-based visualization
 │   ├── zeta_function_3d.py # NEW: 3D heatmap visualization of Zeta function
@@ -86,8 +85,8 @@ return fig
 
 def display_zeta_plot():
 """
-    Display the Zeta Function visualization.
-    """
+Display the Zeta Function visualization.
+"""
 fig = generate_zeta_function_plot()
 fig.show()
 
@@ -102,8 +101,8 @@ from ai.zeta_visualization import display_zeta_plot
 
 def integrate_zeta_dynamics():
 """
-    Integrate the Zeta Function Dynamics into the EternaFX Framework.
-    """
+Integrate the Zeta Function Dynamics into the EternaFX Framework.
+"""
 print("Launching Zeta Function Dynamics Visualization...")
 display_zeta_plot()
 
@@ -116,8 +115,8 @@ from ai.zeta_visualization import generate_zeta_function_plot
 
 def test_generate_zeta_function_plot():
 """
-    Test if the Zeta Function plot generates without errors.
-    """
+Test if the Zeta Function plot generates without errors.
+"""
 try:
 fig = generate_zeta_function_plot()
 assert fig is not None
