@@ -1,0 +1,10 @@
+# Termux requirements.txt
+- [x] numpy
+mpmath
+plotly
+matplotlib
+scipy
+flask
+flask-restful
+flask-cors
+gunicorn
