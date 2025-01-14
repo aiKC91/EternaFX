@@ -2,7 +2,7 @@ import random
 
 class ScenarioGenerator:
     """
-    Generates in-game or AI-driven scenarios referencing advanced
+    Generates in-game yor AI-driven scenarios referencing advanced
     breakthroughs like Riemann Hypothesis, P vs NP, etc.
     """
     potential_breakthroughs = [
