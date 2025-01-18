@@ -1,0 +1,89 @@
+# Core Libraries
+numpy==1.25.0
+scipy==1.11.0
+sympy==1.12
+mpmath==1.3.0
+pandas==2.1.0
+
+# Machine Learning and AI
+torch==2.0.1
+torchvision==0.15.2
+transformers==4.34.0
+sentence-transformers==2.2.2
+
+# Web Framework (Backend)
+fastapi==0.100.0
+uvicorn[standard]==0.23.0
+httpx==0.24.1
+websockets==11.0.3
+
+# Data Visualization
+matplotlib==3.8.0
+plotly==5.15.0
+seaborn==0.13.0
+bokeh==3.2.2
+
+# Utilities
+pydantic==2.2.1
+python-dotenv==1.0.0
+loguru==0.7.0
+rich==13.6.0
+prompt-toolkit==3.0.40
+tabulate==0.9.0
+
+# Security and Encryption
+cryptography==41.0.0
+pycryptodome==3.18.0
+
+# WebSocket (Multiplayer Support)
+websockets==11.0.3
+aioredis==2.1.1
+
+# Advanced Mathematics and Prime Gap Analysis
+numba==0.57.2
+symengine==0.11.1
+pyinterval==1.6.0
+mpmath==1.3.0
+
+# Debugging and Profiling
+debugpy==1.6.7
+line-profiler==4.1.0
+
+# Terminal and Interactive CLI
+prompt-toolkit==3.0.40
+typer==0.9.0
+
+# Zeta Function and Specialized Features
+mpmath==1.3.0
+sympy==1.12
+quadpy==0.17.1
+
+# Testing and Mocking
+pytest==7.4.2
+pytest-asyncio==0.21.0
+pytest-mock==3.11.1
+pytest-cov==4.1.0
+
+# Environment Management and Deployment
+docker==6.2.1
+docker-compose==2.21.0
+
+# AI Logging and Traceability
+opencensus==0.11.0
+opentelemetry-sdk==1.30.0
+opentelemetry-api==1.30.0
+
+# File Storage and Management
+fsspec==2023.10.0
+gcsfs==2023.10.0
+s3fs==2023.10.0
+
+# Natural Language Processing
+nltk==3.9.0
+spacy==3.6.0
+
+# Scheduler for Events and Automation
+schedule==1.2.0
+
+# Parallelism and Performance
+ray==2.8.3 
