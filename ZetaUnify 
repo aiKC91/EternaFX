@@ -1,0 +1,117 @@
+import torch
+import torch.nn as nn
+import numpy as np
+from scipy.fft import fft
+from flask import Flask, request, jsonify
+
+# ========== QUANTUM HARMONY METRICS ==========
+def harmony_index(sequence):
+    """Compute normalized Pearson correlation between adjacent terms (excluding terminal descent)."""
+    truncated = [x for x in sequence if x >= 4]
+    if len(truncated) < 2: return 0.0
+    
+    x = np.array(truncated[:-1])
+    y = np.array(truncated[1:])
+    return (np.corrcoef(x, y)[0, 1] + 1) / 2  # Normalized to [0,1]
+
+def chaos_factor(sequence):
+    """Calculate Shannon entropy of log-scale step differences."""
+    deltas = np.log(sequence[:-1]) - np.log(sequence[1:])
+    hist = np.histogram(deltas, bins=10)[0] + 1e-12  # Avoid division by zero
+    prob = hist / hist.sum()
+    return -np.sum(prob * np.log(prob)) / np.log(10)  # Normalized by max entropy
+
+def entanglement_index(sequence):
+    """Compute spectral dominance via FFT."""
+    fft_vals = np.abs(fft(sequence))
+    return np.max(fft_vals[1:]) / fft_vals[0]  # Ratio of peak non-DC component to DC
+
+# ========== COLLATZ-SPECIFIC TRANSFORMER ==========
+class CollatzTransformer(nn.Module):
+    def __init__(self, input_dim=64, hidden_dim=128):
+        super().__init__()
+        self.encoder = nn.TransformerEncoder(
+            nn.TransformerEncoderLayer(d_model=hidden_dim, nhead=8),
+            num_layers=4
+        )
+        # Multi-task heads for Quantum Harmony metrics
+        self.harmony_head = nn.Linear(hidden_dim, 1)
+        self.chaos_head = nn.Linear(hidden_dim, 1)
+        self.entanglement_head = nn.Linear(hidden_dim, 1)
+        
+    def forward(self, x):
+        x = x.unsqueeze(1)  # Add sequence dimension
+        encoded = self.encoder(x)
+        return (
+            torch.sigmoid(self.harmony_head(encoded[-1])),  # Harmony ∈ [0,1]
+            torch.sigmoid(self.chaos_head(encoded[-1])),    # Chaos ∈ [0,1]
+            torch.sigmoid(self.entanglement_head(encoded[-1]))  # Entanglement ∈ [0,1]
+        )
+
+# ========== KNOWLEDGE DISTILLATION ==========
+class CollatzDistiller:
+    def __init__(self, teacher, student):
+        self.teacher = teacher
+        self.student = student
+        self.loss_fn = nn.MSELoss()  # For regression tasks
+        
+    def distill(self, sequences, epochs=100):
+        optimizer = optim.Adam(self.student.parameters())
+        
+        for _ in range(epochs):
+            total_loss = 0
+            for seq in sequences:
+                # Teacher's ground truth metrics
+                h_true = torch.tensor([harmony_index(seq)])
+                c_true = torch.tensor([chaos_factor(seq)])
+                e_true = torch.tensor([entanglement_index(seq)])
+                
+                # Student prediction
+                seq_tensor = torch.tensor(seq, dtype=torch.float32)
+                h_pred, c_pred, e_pred = self.student(seq_tensor)
+                
+                # Multi-task loss
+                loss = self.loss_fn(h_pred, h_true) + \
+                       self.loss_fn(c_pred, c_true) + \
+                       self.loss_fn(e_pred, e_true)
+                       
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+                total_loss += loss.item()
+            
+            print(f"Epoch Loss: {total_loss/len(sequences):.4f}")
+
+# ========== FLASK DEPLOYMENT ==========
+app = Flask(__name__)
+model = CollatzTransformer()
+
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    try:
+        sequence = request.json['sequence']
+        with torch.no_grad():
+            h, c, e = model(torch.tensor(sequence, dtype=torch.float32))
+        return jsonify({
+            "harmony": h.item(),
+            "chaos": c.item(),
+            "entanglement": e.item()
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+if __name__ == "__main__":
+    # Example usage
+    teacher = CollatzTransformer()
+    student = CollatzTransformer()
+    distiller = CollatzDistiller(teacher, student)
+    
+    # Train with synthetic Collatz sequences
+    sequences = [
+        [27, 82, 41, ..., 4, 2, 1],  # Replace with real generated sequences
+        [871, 2614, 1307, ..., 4, 2, 1]
+    ]
+    distiller.distill(sequences)
+    
+    # Deploy analyzer
+    app.run(host='0.0.0.0', port=5000)
